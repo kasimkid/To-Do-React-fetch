@@ -2,6 +2,7 @@ import React from "react"
 
 
 
+
 const Tareas = ({listaTarea,deletItem}) => {
   
   
@@ -11,7 +12,7 @@ const Tareas = ({listaTarea,deletItem}) => {
       <ul>
       {listaTarea?.map((element, index)=> {
         return(
-        <li className="tarea-asignada" key={index}>{element} <button className="btns" onClick={deletItem}>x</button></li>
+        <li className="tarea-asignada" key={index}>{element.label} <button className="btns" onClick={() => deletItem(index)}>x</button></li>
         )
       })}
       </ul>
