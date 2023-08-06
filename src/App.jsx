@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react"
 import Tareas from "./componentes/Tareas"
+import Error from "./componentes/Error"
 
 function App() {
 
-  const [tarea, setTarea] = useState({label:"", done: false})
+  const [tarea, setTarea] = useState({ label: "", done: false })
   const [listaTarea, setListaTarea] = useState([])
-  
+  const [alert, setAlert] = useState(false)
 
   const handleChange = (e) => {
-    setTarea ({
+    setTarea({
       label: e.target.value,
       done: false
     })
@@ -18,86 +19,114 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const newList = [...listaTarea, tarea]
-    setListaTarea(newList)
-    setTarea({label:"", done: false})
-    putData(newList)
-}
+    if (tarea.label === "") {
+      setAlert (true)
+      return
+    }
+    setListaTarea([...listaTarea, tarea])
+    putData2([...listaTarea, tarea])
+    setTarea({ label: "", done: false })
+    setAlert(false)
+  }
 
   const deletItem = (id) => {
-    const newTask = [...listaTarea]
-    newTask.splice(id, 1)
-    setListaTarea(newTask)
-    deleteData(newTask)
+    const deletedTask = listaTarea.filter((tarea, index) => index !== id)
+    setListaTarea(deletedTask)
+    deletedData(deletedTask)
+
   }
 
+  const getData2 = async () => {
+    const url = "https://playground.4geeks.com/apis/fake/todos/user/rafael"
+    const resp = await fetch(url)
+    const data = await resp.json()
+    setListaTarea(data)
+  }
 
-  const getData = () => {
-    fetch("https://playground.4geeks.com/apis/fake/todos/user/rafael", {
-      method:"GET",
-      headers:{
+  // const getData = () => {
+  //   fetch("https://playground.4geeks.com/apis/fake/todos/user/rafael", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //     .then(data => {
+  //       console.log(data)
+  //       return data.json()
+  //     })
+  //     .then(resp => {
+  //       console.log(resp)
+
+  //     })
+  //     .catch(error => {
+  //       console.log(error)
+  //     })
+
+  // }
+  useEffect(() => {
+    getData2()
+  }, [])
+
+  const putData2 = async (newList) => {
+    const url = "https://playground.4geeks.com/apis/fake/todos/user/rafael"
+    const request = {
+      method: "PUT",
+      body: JSON.stringify(newList),
+      headers: {
         "Content-Type": "application/json"
       }
-      })
-    .then(data =>{
+    }
+    try {
+      const resp = await fetch(url, request)
+      const data = await resp.json()
       console.log(data)
-      return data.json()
-    })
-    .then(resp => {
-      console.log(resp)
 
-    })
-    .catch(error => {
+    } catch (error) {
       console.log(error)
-    })
+    }
 
   }
-useEffect(() => {
-  getData()
-}, [])
+  // const putData = (newList) => {
+  //   fetch("https://playground.4geeks.com/apis/fake/todos/user/rafael", {
+  //     method: "PUT",
+  //     body: JSON.stringify(newList),
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //     .then(data => {
 
+  //       console.log(data)
+  //       return data.json()
+  //     })
+  //     .then(resp => {
+  //       console.log(resp)
 
-const putData = (newList) => {
-  fetch("https://playground.4geeks.com/apis/fake/todos/user/rafael", {
-    method:"PUT",
-    body: JSON.stringify(newList),
-    headers:{
-      "Content-Type": "application/json"
-    }
+  //     })
+  //     .catch(error => {
+  //       console.log(error)
+  //     })
+  // }
+
+  const deletedData = (newList) => {
+    fetch('https://playground.4geeks.com/apis/fake/todos/user/rafael', {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newList),
+
     })
-  .then(data =>{
-    
-    console.log(data)
-    return data.json()
-  })
-  .then(resp => {
-    console.log(resp)
-
-  })
-  .catch(error => {
-    console.log(error)
-  })
-}
-
-const deleteData = (newList) => {
-  fetch('https://playground.4geeks.com/apis/fake/todos/user/rafael', {
-    method:"PUT",
-    headers:{
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(newList),
-
-  })
-  .then(data => {
-    return data.json()
-  })
-  .then(resp => {
-    console.log(resp)
-  })
-  .catch(error =>{
-    console.log(resp)
-  })
-}
+      .then(data => {
+        return data.json()
+      })
+      .then(resp => {
+        console.log(resp)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
 
 
@@ -111,6 +140,10 @@ const deleteData = (newList) => {
           <input type="text" value={tarea.label} placeholder=" Agree one task" onChange={handleChange} />
 
         </form>
+        {alert ?
+          <Error mensaje="Este campo es obligatorio*" />
+          : null
+        }
         <Tareas listaTarea={listaTarea} deletItem={deletItem} />
         {listaTarea.length > 0 ? (<div><p>{listaTarea.length} items</p></div>) : null}
       </div>
