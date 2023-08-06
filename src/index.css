@@ -1,21 +1,25 @@
 
 body {
-    background-color: #011a27;
+    background-color: #021C1E;
 }
 
 .contenedor {
-    background: #ccc;
+    background: #0c4457;
     margin-top: 40px;
     padding: 40px 20px;
     text-align: center;
     width: 500px;
     
     min-height: 500px;
-    border: 5px solid #f0810f;
+    border: 5px solid #e64141;
     margin-left: auto;
     margin-right: auto;
 
 }
+h1{
+    color: beige;
+}
+
 
 input {
     padding-left: 10px;
@@ -24,6 +28,7 @@ input {
     font-family: 'Gentium Plus', serif;
     border-radius: 5px;
     outline: none;
+    
 }
 
 .tarea-asignada {
@@ -38,20 +43,26 @@ li {
     
     width: 90%;
     justify-content:space-between;
-    background-color: #327dee;
+    background-color: #b0ccff;
     border-radius: 5px;
     display: flex;
     margin: 10px 20px;
     padding-left: 10px;
-    box-shadow: 5px 7px 8px 0px rgba(7, 2, 2, 0.75);
+    box-shadow: 5px 7px 8px 0px rgba(54, 219, 82, 0.75);
 }
 
+.btns{
+    border-radius: 5px;
+}
 
 .btns:hover{
     cursor: pointer;
     background-color: #f0310f;
 }
+.mensaje{
+    color: #e64141;
+}
 p{
     font-weight: bold;
-    color: #0c4e72;
+    color: #e64141;
 }
